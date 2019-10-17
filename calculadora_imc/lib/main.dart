@@ -12,7 +12,21 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  Color defaultColor = Colors.indigo;
+  final Color _defaultColor = Colors.indigo;
+
+  TextEditingController _weightController = TextEditingController();
+  TextEditingController _heightController = TextEditingController();
+
+  String _infoText = "Informe seus dados!";
+
+  void _resetFields() {
+    _weightController.text = "";
+    _heightController.text = "";
+    _infoText = "Informe seus dados!";
+  }
+
+  void _calculate() {
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +34,11 @@ class _HomeState extends State<Home> {
         appBar: AppBar(
           title: Text("Calculadora de IMC"),
           centerTitle: true,
-          backgroundColor: defaultColor,
+          backgroundColor: _defaultColor,
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.refresh),
-              onPressed: () {},
+              onPressed: _resetFields,
             )
           ],
         ),
@@ -37,42 +51,44 @@ class _HomeState extends State<Home> {
               Icon(
                 Icons.person_outline,
                 size: 120,
-                color: defaultColor,
+                color: _defaultColor,
               ),
               TextField(
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                     labelText: "Peso (kg)",
-                    labelStyle: TextStyle(color: defaultColor)),
+                    labelStyle: TextStyle(color: _defaultColor)),
                 textAlign: TextAlign.center,
-                style: TextStyle(color: defaultColor),
+                style: TextStyle(color: _defaultColor),
+                controller: _weightController,
               ),
               TextField(
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                     labelText: "Altura (cm)",
-                    labelStyle: TextStyle(color: defaultColor)),
+                    labelStyle: TextStyle(color: _defaultColor)),
                 textAlign: TextAlign.center,
-                style: TextStyle(color: defaultColor),
+                style: TextStyle(color: _defaultColor),
+                controller: _heightController,
               ),
               Padding(
                 padding: EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 15.0),
                 child: Container(
                   height: 50.0,
                   child: RaisedButton(
-                    onPressed: () {},
+                    onPressed: _calculate,
                     child: Text(
                       "Calcular",
                       style: TextStyle(color: Colors.white, fontSize: 20.0),
                     ),
-                    color: defaultColor,
+                    color: _defaultColor,
                   ),
                 ),
               ),
               Text(
-                "Info",
+                _infoText,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: defaultColor, fontSize: 25.0),
+                style: TextStyle(color: _defaultColor, fontSize: 25.0),
               )
             ],
           ),
