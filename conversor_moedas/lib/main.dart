@@ -19,7 +19,11 @@ void main() async {
 
 Future<Map> getData() async {
   http.Response response = await http.get(request);
-  return json.decode(response.body);
+  try {
+    return json.decode(response.body);
+  } catch (ex) {
+    throw "error: " + ex.toString() + "\n\nresponse body:\n" + response.body;
+  }
 }
 
 class Home extends StatefulWidget {
@@ -75,13 +79,21 @@ class _HomeState extends State<Home> {
                       style: TextStyle(color: Colors.amber, fontSize: 25.0)));
             default:
               if (snapshot.hasError) {
-                return Center(
-                  child: Text(
-                    "Erro ao Carregar Dados :(",
-                    style: TextStyle(color: Colors.amber, fontSize: 25.0),
-                    textAlign: TextAlign.center,
-                  ),
-                );
+                return SingleChildScrollView(
+                    padding: EdgeInsets.all(15.0),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          Text(
+                            "Erro ao Carregar Dados :(",
+                            style:
+                            TextStyle(color: Colors.amber, fontSize: 25.0),
+                            textAlign: TextAlign.center,
+                          ),
+                          Divider(),
+                          Text(snapshot.error.toString() + "\n\n",
+                            style: TextStyle(color: Colors.redAccent),)
+                        ]));
               } else {
                 _dolar = snapshot.data["results"]["currencies"]["USD"]["buy"];
                 _euro = snapshot.data["results"]["currencies"]["EUR"]["buy"];
@@ -96,11 +108,14 @@ class _HomeState extends State<Home> {
                       Icon(Icons.monetization_on,
                           size: 150.0, color: Colors.amber),
                       Divider(),
-                      buildTextField("Reais", "R\$", _realController, _realChanged),
+                      buildTextField(
+                          "Reais", "R\$", _realController, _realChanged),
                       Divider(),
-                      buildTextField("Dólares", "US\$", _dolarController, _dolarChanged),
+                      buildTextField(
+                          "Dólares", "US\$", _dolarController, _dolarChanged),
                       Divider(),
-                      buildTextField("Euros", "€", _euroController, _euroChanged)
+                      buildTextField(
+                          "Euros", "€", _euroController, _euroChanged)
                     ],
                   ),
                 );
@@ -112,7 +127,8 @@ class _HomeState extends State<Home> {
   }
 }
 
-Widget buildTextField(String label, String prefix, TextEditingController c, Function f) {
+Widget buildTextField(String label, String prefix, TextEditingController c,
+    Function f) {
   return TextField(
     decoration: InputDecoration(
         labelText: label,
