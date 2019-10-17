@@ -2,7 +2,7 @@
 
 Converts currency from and to real, dollar and euro.
 
-<p align="center>
+<p align="center">
     <img src="https://user-images.githubusercontent.com/44736064/67045496-ca6fd280-f104-11e9-8317-caaa0e6debff.gif">
 </p>
 
