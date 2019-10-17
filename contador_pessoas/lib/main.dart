@@ -12,10 +12,20 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
 
   int _people = 0;
+  String _infoText = "Pode entrar!";
 
   void _changePeople(int delta) {
     setState(() {
       _people += delta;
+
+      if (_people < 0) {
+        _infoText = "Masoq?! O.o";
+      } else if (_people < 10) {
+        _infoText = "Pode entrar!";
+      } else {
+        _infoText = "Lotado.";
+      }
+
     });
   }
 
@@ -66,7 +76,7 @@ class _HomeState extends State<Home> {
               ],
             ),
             Text(
-              "Pode entrar!",
+              _infoText,
               style: TextStyle(
                   color: Colors.white,
                   fontStyle: FontStyle.italic,
