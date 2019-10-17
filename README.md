@@ -7,7 +7,7 @@ This repository holds my projects for the course "[*Criação de Apps Android e 
 Each project directory contains a simple description and screenshots:
 
 1. [People counter](/contador_pessoas)
-2. BMI calculator
+2. [BMI calculator](/calculadora_imc)
 3. Currency conversor
 4. Task list
 5. GIF searcher
