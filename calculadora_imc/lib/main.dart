@@ -26,6 +26,27 @@ class _HomeState extends State<Home> {
   }
 
   void _calculate() {
+    setState(() {
+      double weight = double.parse(_weightController.text);
+      double height = double.parse(_heightController.text) / 100;
+      double bmi = weight / (height * height);
+
+      if (bmi < 18.6) {
+        _infoText = "Abaixo do peso";
+      } else if (bmi < 24.9) {
+        _infoText = "Peso ideal";
+      } else if (bmi < 29.9) {
+        _infoText = "Levemente acima do peso";
+      } else if (bmi < 34.9) {
+        _infoText = "Obesidade grau I";
+      } else if (bmi < 39.9) {
+        _infoText = "Obesidade grau II";
+      } else {
+        _infoText = "Obesidade grau III";
+      }
+
+      _infoText += " (${bmi.toStringAsFixed(2)})";
+    });
   }
 
   @override
