@@ -1,6 +1,6 @@
 # conversor_moedas
 
-Converts currency from and to real, dollar and euro.
+Converts currency from and to real, dollar, euro, pound sterling, argentine peso and bitcoin.
 
 <p align="center">
     <img src="https://user-images.githubusercontent.com/44736064/67092342-5a556100-f185-11e9-9af7-1d6ac1f408b9.gif">
