@@ -35,14 +35,23 @@ class _HomeState extends State<Home> {
   final _realController = TextEditingController();
   final _dolarController = TextEditingController();
   final _euroController = TextEditingController();
+  final _poundSterlingController = TextEditingController();
+  final _argentinePesoController = TextEditingController();
+  final _bitcoinController = TextEditingController();
 
   double _dolar;
   double _euro;
+  double _poundSterling;
+  double _argentinePeso;
+  double _bitcoin;
 
   void _realChanged(String text) {
     double real = double.parse(text);
     _dolarController.text = (real / _dolar).toStringAsFixed(2);
     _euroController.text = (real / _euro).toStringAsFixed(2);
+    _poundSterlingController.text = (real / _poundSterling).toStringAsFixed(2);
+    _argentinePesoController.text = (real / _argentinePeso).toStringAsFixed(2);
+    _bitcoinController.text = (real / _bitcoin).toStringAsFixed(6);
   }
 
   void _dolarChanged(String text) {
@@ -50,6 +59,9 @@ class _HomeState extends State<Home> {
     double dolarInReais = dolar * this._dolar;
     _realController.text = dolarInReais.toStringAsFixed(2);
     _euroController.text = (dolarInReais / _euro).toStringAsFixed(2);
+    _poundSterlingController.text = (dolarInReais / _poundSterling).toStringAsFixed(2);
+    _argentinePesoController.text = (dolarInReais / _argentinePeso).toStringAsFixed(2);
+    _bitcoinController.text = (dolarInReais / _bitcoin).toStringAsFixed(6);
   }
 
   void _euroChanged(String text) {
@@ -57,6 +69,39 @@ class _HomeState extends State<Home> {
     double euroInReais = euro * this._euro;
     _realController.text = euroInReais.toStringAsFixed(2);
     _dolarController.text = (euroInReais / _dolar).toStringAsFixed(2);
+    _poundSterlingController.text = (euroInReais / _poundSterling).toStringAsFixed(2);
+    _argentinePesoController.text = (euroInReais / _argentinePeso).toStringAsFixed(2);
+    _bitcoinController.text = (euroInReais / _bitcoin).toStringAsFixed(6);
+  }
+
+  void _poundSterlingChanged(String text) {
+    double pound = double.parse(text);
+    double poundInReais = pound * this._poundSterling;
+    _realController.text = poundInReais.toStringAsFixed(2);
+    _dolarController.text = (poundInReais / _dolar).toStringAsFixed(2);
+    _euroController.text = (poundInReais / _euro).toStringAsFixed(2);
+    _argentinePesoController.text = (poundInReais / _argentinePeso).toStringAsFixed(2);
+    _bitcoinController.text = (poundInReais / _bitcoin).toStringAsFixed(6);
+  }
+
+  void _argentinePesoChanged(String text) {
+    double peso = double.parse(text);
+    double pesoInReais = peso * this._argentinePeso;
+    _realController.text = pesoInReais.toStringAsFixed(2);
+    _dolarController.text = (pesoInReais / _dolar).toStringAsFixed(2);
+    _euroController.text = (pesoInReais / _euro).toStringAsFixed(2);
+    _poundSterlingController.text = (pesoInReais / _poundSterling).toStringAsFixed(2);
+    _bitcoinController.text = (pesoInReais / _bitcoin).toStringAsFixed(6);
+  }
+
+  void _bitcoinChanged(String text) {
+    double btc = double.parse(text);
+    double btcInReais = btc * this._bitcoin;
+    _realController.text = btcInReais.toStringAsFixed(2);
+    _dolarController.text = (btcInReais / _dolar).toStringAsFixed(2);
+    _euroController.text = (btcInReais / _euro).toStringAsFixed(2);
+    _poundSterlingController.text = (btcInReais / _poundSterling).toStringAsFixed(2);
+    _argentinePesoController.text = (btcInReais / _argentinePeso).toStringAsFixed(2);
   }
 
   @override
@@ -87,18 +132,21 @@ class _HomeState extends State<Home> {
                           Text(
                             "Erro ao Carregar Dados :(",
                             style:
-                            TextStyle(color: Colors.amber, fontSize: 25.0),
+                                TextStyle(color: Colors.amber, fontSize: 25.0),
                             textAlign: TextAlign.center,
                           ),
                           Divider(),
-                          Text(snapshot.error.toString() + "\n\n",
-                            style: TextStyle(color: Colors.redAccent),)
+                          Text(
+                            snapshot.error.toString() + "\n\n",
+                            style: TextStyle(color: Colors.redAccent),
+                          )
                         ]));
               } else {
                 _dolar = snapshot.data["results"]["currencies"]["USD"]["buy"];
                 _euro = snapshot.data["results"]["currencies"]["EUR"]["buy"];
-                debugPrint(_dolar.toString());
-                debugPrint(_euro.toString());
+                _poundSterling = snapshot.data["results"]["currencies"]["GBP"]["buy"];
+                _argentinePeso = snapshot.data["results"]["currencies"]["ARS"]["buy"];
+                _bitcoin = snapshot.data["results"]["currencies"]["BTC"]["buy"];
 
                 return SingleChildScrollView(
                   padding: EdgeInsets.all(15.0),
@@ -115,7 +163,17 @@ class _HomeState extends State<Home> {
                           "Dólares", "US\$", _dolarController, _dolarChanged),
                       Divider(),
                       buildTextField(
-                          "Euros", "€", _euroController, _euroChanged)
+                          "Euros", "€ ", _euroController, _euroChanged),
+                      Divider(),
+                      buildTextField(
+                          "Libras Esterlinas", "£ ", _poundSterlingController, _poundSterlingChanged),
+                      Divider(),
+                      buildTextField(
+                          "Pesos Argentinos", "\$ ", _argentinePesoController, _argentinePesoChanged),
+                      Divider(),
+                      buildTextField(
+                          "Bitcoin", "₿ ", _bitcoinController, _bitcoinChanged),
+                      Divider()
                     ],
                   ),
                 );
@@ -127,8 +185,8 @@ class _HomeState extends State<Home> {
   }
 }
 
-Widget buildTextField(String label, String prefix, TextEditingController c,
-    Function f) {
+Widget buildTextField(
+    String label, String prefix, TextEditingController c, Function f) {
   return TextField(
     decoration: InputDecoration(
         labelText: label,
