@@ -15,7 +15,21 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List _toDoList = [];
+  List _taskList = [];
+
+  final _newTaskController = TextEditingController();
+
+  void _addTask() {
+    setState(() {
+      Map<String, dynamic> newTask = Map<String, dynamic>();
+      newTask["title"] = _newTaskController.text;
+      newTask["ok"] = false;
+
+      _taskList.add(newTask);
+
+      _newTaskController.text = "";
+    });
+  }
 
   Future<File> _getFile() async {
     final directory = await getApplicationDocumentsDirectory();
@@ -23,7 +37,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<File> _saveDate() async {
-    String data = json.encode(_toDoList);
+    String data = json.encode(_taskList);
     final File file = await _getFile();
     return file.writeAsString(data);
   }
@@ -53,29 +67,36 @@ class _HomeState extends State<Home> {
                 children: <Widget>[
                   Expanded(
                       child: TextField(
-                        decoration: InputDecoration(
-                            labelText: "Nova tarefa",
-                            labelStyle: TextStyle(color: Colors.blueAccent)),
-                      )),
+                    decoration: InputDecoration(
+                        labelText: "Nova tarefa",
+                        labelStyle: TextStyle(color: Colors.blueAccent)),
+                    controller: _newTaskController,
+                  )),
                   RaisedButton(
                     color: Colors.blueAccent,
                     child: Text("Adicionar",
                         style: TextStyle(color: Colors.white)),
-                    onPressed: () {},
+                    onPressed: _addTask,
                   )
                 ],
               )),
           Expanded(
             child: ListView.builder(
               padding: EdgeInsets.only(top: 10.0),
-              itemCount: _toDoList.length,
+              itemCount: _taskList.length,
               itemBuilder: (context, index) {
                 return CheckboxListTile(
-                  title: Text(_toDoList[index]["title"]),
-                  value: _toDoList[index]["ok"],
+                  title: Text(_taskList[index]["title"]),
+                  value: _taskList[index]["ok"],
                   secondary: CircleAvatar(
-                    child: Icon(_toDoList[index]["ok"] ? Icons.check : Icons.error),
+                    child: Icon(
+                        _taskList[index]["ok"] ? Icons.check : Icons.error),
                   ),
+                  onChanged: (c) {
+                    setState(() {
+                      _taskList[index]["ok"] = c;
+                    });
+                  },
                 );
               },
             ),
