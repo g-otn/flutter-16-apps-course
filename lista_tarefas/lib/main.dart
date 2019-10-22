@@ -117,6 +117,23 @@ class _HomeState extends State<Home> {
           _taskList.removeAt(index);
 
           _saveData();
+
+          final snack = SnackBar(
+            content: Text("Tarefa ${_lastRemoved["title"]} removida!"),
+            action: SnackBarAction(
+                label: "Desfazer",
+                onPressed: () {
+                  setState(() {
+                    print(_lastRemovedIndex);
+                    _taskList.insert(_lastRemovedIndex, _lastRemoved);
+                    _saveData();
+                  });
+                }),
+            duration: Duration(seconds: 2),
+          );
+
+          Scaffold.of(context).showSnackBar(snack);
+
         });
       },
     );
