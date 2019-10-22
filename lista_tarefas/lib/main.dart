@@ -15,9 +15,20 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final _newTaskController = TextEditingController();
+
   List _taskList = [];
 
-  final _newTaskController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+
+    _readData().then((data) {
+      setState(() {
+        _taskList = json.decode(data);
+      });
+    });
+  }
 
   void _addTask() {
     setState(() {
@@ -26,6 +37,7 @@ class _HomeState extends State<Home> {
       newTask["ok"] = false;
 
       _taskList.add(newTask);
+      _saveData();
 
       _newTaskController.text = "";
     });
@@ -75,6 +87,7 @@ class _HomeState extends State<Home> {
                   onChanged: (c) {
                     setState(() {
                       _taskList[index]["ok"] = c;
+                      _saveData();
                     });
                   },
                 );
@@ -91,7 +104,7 @@ class _HomeState extends State<Home> {
     return File("${directory.path}/data.json");
   }
 
-  Future<File> _saveDate() async {
+  Future<File> _saveData() async {
     String data = json.encode(_taskList);
     final File file = await _getFile();
     return file.writeAsString(data);
