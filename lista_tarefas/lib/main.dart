@@ -15,7 +15,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   List _toDoList = [];
 
   Future<File> _getFile() async {
@@ -56,17 +55,30 @@ class _HomeState extends State<Home> {
                       child: TextField(
                         decoration: InputDecoration(
                             labelText: "Nova tarefa",
-                            labelStyle: TextStyle(color: Colors.blueAccent)
-                        ),
-                      )
-                  ),
+                            labelStyle: TextStyle(color: Colors.blueAccent)),
+                      )),
                   RaisedButton(
                     color: Colors.blueAccent,
-                    child: Text("Adicionar", style: TextStyle(color: Colors.white)),
+                    child: Text("Adicionar",
+                        style: TextStyle(color: Colors.white)),
                     onPressed: () {},
                   )
                 ],
-              )
+              )),
+          Expanded(
+            child: ListView.builder(
+              padding: EdgeInsets.only(top: 10.0),
+              itemCount: _toDoList.length,
+              itemBuilder: (context, index) {
+                return CheckboxListTile(
+                  title: Text(_toDoList[index]["title"]),
+                  value: _toDoList[index]["ok"],
+                  secondary: CircleAvatar(
+                    child: Icon(_toDoList[index]["ok"] ? Icons.check : Icons.error),
+                  ),
+                );
+              },
+            ),
           )
         ],
       ),
