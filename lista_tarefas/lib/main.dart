@@ -36,7 +36,7 @@ class _HomeState extends State<Home> {
       newTask["title"] = _newTaskController.text;
       newTask["ok"] = false;
 
-      _taskList.add(newTask);
+      _taskList.insert(0, newTask);
       _saveData();
 
       _newTaskController.text = "";
@@ -74,28 +74,28 @@ class _HomeState extends State<Home> {
               )),
           Expanded(
             child: ListView.builder(
-              padding: EdgeInsets.only(top: 10.0),
-              itemCount: _taskList.length,
-              itemBuilder: (context, index) {
-                return CheckboxListTile(
-                  title: Text(_taskList[index]["title"]),
-                  value: _taskList[index]["ok"],
-                  secondary: CircleAvatar(
-                    child: Icon(
-                        _taskList[index]["ok"] ? Icons.check : Icons.error),
-                  ),
-                  onChanged: (c) {
-                    setState(() {
-                      _taskList[index]["ok"] = c;
-                      _saveData();
-                    });
-                  },
-                );
-              },
-            ),
+                padding: EdgeInsets.only(top: 10.0),
+                itemCount: _taskList.length,
+                itemBuilder: _buildItem),
           )
         ],
       ),
+    );
+  }
+
+  Widget _buildItem(context, index) {
+    return CheckboxListTile(
+      title: Text(_taskList[index]["title"]),
+      value: _taskList[index]["ok"],
+      secondary: CircleAvatar(
+        child: Icon(_taskList[index]["ok"] ? Icons.check : Icons.error),
+      ),
+      onChanged: (c) {
+        setState(() {
+          _taskList[index]["ok"] = c;
+          _saveData();
+        });
+      },
     );
   }
 
