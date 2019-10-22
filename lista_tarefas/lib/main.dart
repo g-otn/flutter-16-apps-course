@@ -84,18 +84,29 @@ class _HomeState extends State<Home> {
   }
 
   Widget _buildItem(context, index) {
-    return CheckboxListTile(
-      title: Text(_taskList[index]["title"]),
-      value: _taskList[index]["ok"],
-      secondary: CircleAvatar(
-        child: Icon(_taskList[index]["ok"] ? Icons.check : Icons.error),
+    return Dismissible(
+      key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
+      background: Container(
+        color: Colors.red,
+        child: Align(
+          alignment: Alignment(-0.875, 0),
+          child: Icon(Icons.delete, color: Colors.white),
+        ),
       ),
-      onChanged: (c) {
-        setState(() {
-          _taskList[index]["ok"] = c;
-          _saveData();
-        });
-      },
+      direction: DismissDirection.startToEnd,
+      child: CheckboxListTile(
+        title: Text(_taskList[index]["title"]),
+        value: _taskList[index]["ok"],
+        secondary: CircleAvatar(
+          child: Icon(_taskList[index]["ok"] ? Icons.check : Icons.error),
+        ),
+        onChanged: (c) {
+          setState(() {
+            _taskList[index]["ok"] = c;
+            _saveData();
+          });
+        },
+      ),
     );
   }
 
