@@ -31,26 +31,6 @@ class _HomeState extends State<Home> {
     });
   }
 
-  Future<File> _getFile() async {
-    final directory = await getApplicationDocumentsDirectory();
-    return File("${directory.path}/data.json");
-  }
-
-  Future<File> _saveDate() async {
-    String data = json.encode(_taskList);
-    final File file = await _getFile();
-    return file.writeAsString(data);
-  }
-
-  Future<String> _readData() async {
-    try {
-      final file = await _getFile();
-      return file.readAsString();
-    } catch (e) {
-      return null;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,5 +84,25 @@ class _HomeState extends State<Home> {
         ],
       ),
     );
+  }
+
+  Future<File> _getFile() async {
+    final directory = await getApplicationDocumentsDirectory();
+    return File("${directory.path}/data.json");
+  }
+
+  Future<File> _saveDate() async {
+    String data = json.encode(_taskList);
+    final File file = await _getFile();
+    return file.writeAsString(data);
+  }
+
+  Future<String> _readData() async {
+    try {
+      final file = await _getFile();
+      return file.readAsString();
+    } catch (e) {
+      return null;
+    }
   }
 }
