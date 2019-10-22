@@ -19,6 +19,9 @@ class _HomeState extends State<Home> {
 
   List _taskList = [];
 
+  Map<String, dynamic> _lastRemoved;
+  int _lastRemovedIndex;
+
   @override
   void initState() {
     super.initState();
@@ -107,6 +110,15 @@ class _HomeState extends State<Home> {
           });
         },
       ),
+      onDismissed: (direction) {
+        setState(() {
+          _lastRemoved = Map.from(_taskList[index]);
+          _lastRemovedIndex = index;
+          _taskList.removeAt(index);
+
+          _saveData();
+        });
+      },
     );
   }
 
