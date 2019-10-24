@@ -9,7 +9,7 @@ Each project directory contains a simple description and screenshots:
 1. [People counter](/contador_pessoas)
 2. [BMI calculator](/calculadora_imc)
 3. [Currency conversor](/conversor_moedas)
-4. Task list
+4. [Task list](/lista_tarefas)
 5. GIF searcher
 6. Contact list
 7. Online chat (Firebase)
