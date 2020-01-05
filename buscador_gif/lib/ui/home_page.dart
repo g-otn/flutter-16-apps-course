@@ -59,6 +59,29 @@ class _HomePageState extends State<HomePage> {
               style: TextStyle(color: Colors.white, fontSize: 18.0),
               textAlign: TextAlign.center,
             ),
+          ),
+          Expanded(
+            child: FutureBuilder(
+              future: _getGifs(),
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                  case ConnectionState.none:
+                    return Container(
+                      width: 200.0,
+                      height: 200.0,
+                      alignment: Alignment.center,
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        strokeWidth: 5.0,
+                      ),
+                    );
+                    break;
+                  default:
+                    return Container();
+                }
+              },
+            ),
           )
         ],
       ),
