@@ -9,7 +9,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   String _search;
   int _offset = 0;
 
@@ -30,7 +29,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    _getGifs().then((map){
+    _getGifs().then((map) {
       print(map);
     });
   }
@@ -50,9 +49,12 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.all(10.0),
             child: TextField(
               decoration: InputDecoration(
-                  labelText: "Pesquise aqui!",
-                  labelStyle: TextStyle(color: Colors.white),
-                  border: OutlineInputBorder()
+                labelText: "Pesquise aqui!",
+                labelStyle: TextStyle(color: Colors.white),
+                border: OutlineInputBorder(),
+                enabledBorder: const OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.white),
+                ),
               ),
               style: TextStyle(color: Colors.white, fontSize: 18.0),
               textAlign: TextAlign.center,
