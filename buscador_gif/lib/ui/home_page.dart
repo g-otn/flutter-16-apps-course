@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
     const String API_URL = "https://api.giphy.com/v1";
     const String API_KEY = "QbyzNQRGH9L61agYIWyKTFA20lsw5gtd";
 
-    if (_search == null)
+    if (_search == null || _search == "")
       response = await http.get("$API_URL/gifs/trending?api_key=$API_KEY&limit=20&rating=G");
     else
       response = await http.get("$API_URL/gifs/search?api_key=$API_KEY&limit=20&rating=G&q=$_search&lang=pt");
@@ -30,9 +30,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    _getGifs().then((map) {
-      print(map);
-    });
+    _getGifs();
   }
 
   @override
@@ -59,6 +57,11 @@ class _HomePageState extends State<HomePage> {
               ),
               style: TextStyle(color: Colors.white, fontSize: 18.0),
               textAlign: TextAlign.center,
+              onSubmitted: (text) {
+                setState(() {
+                  _search = text;
+                });
+              },
             ),
           ),
           Expanded(
