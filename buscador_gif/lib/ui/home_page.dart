@@ -19,9 +19,11 @@ class _HomePageState extends State<HomePage> {
     const String API_KEY = "QbyzNQRGH9L61agYIWyKTFA20lsw5gtd";
 
     if (_search == null || _search == "")
-      response = await http.get("$API_URL/gifs/trending?api_key=$API_KEY&limit=20&rating=G");
+      response = await http.get("$API_URL/gifs/trending?api_key=$API_KEY&limit=19&offset=$_offset");
     else
-      response = await http.get("$API_URL/gifs/search?api_key=$API_KEY&limit=20&rating=G&q=$_search&lang=pt");
+      response = await http.get("$API_URL/gifs/search?api_key=$API_KEY&limit=19&rating=G&q=$_search&offset=$_offset");
+
+    print("url: ${response.request.url}");
 
     return json.decode(response.body);
   }
@@ -60,6 +62,7 @@ class _HomePageState extends State<HomePage> {
               onSubmitted: (text) {
                 setState(() {
                   _search = text;
+                  _offset = 0;
                 });
               },
             ),
@@ -93,6 +96,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _createGifTable(BuildContext context, AsyncSnapshot snapshot) {
+    final numberOfGifs = snapshot.data["data"].length;
     return GridView.builder(
         padding: EdgeInsets.all(10.0),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -100,31 +104,51 @@ class _HomePageState extends State<HomePage> {
           crossAxisSpacing: 10.0,
           mainAxisSpacing: 10.0
         ),
-        itemCount: snapshot.data["data"].length,
+        itemCount: numberOfGifs + 1,
         itemBuilder: (context, index) {
-          return GestureDetector(
-            child: Image.network(snapshot.data["data"][index]["images"]["fixed_height_small"]["url"],
-              height: 300.0,
-              fit: BoxFit.cover,
-              loadingBuilder: (context, child, loadingProgress) {
-                return Container(
-                  width: 300.0,
-                  height: 300.0,
-                  alignment: Alignment.center,
-                  child: () {
-                    if (loadingProgress != null)
-                      return CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                        strokeWidth: 15.0,
-                        value: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes,
-                      );
-                    else
-                      return child;
-                  }()
-                );
-              },
-            ),
-          );
+          if (index < numberOfGifs)
+            return GestureDetector(
+              child: Image.network(snapshot.data["data"][index]["images"]["fixed_height_small"]["url"],
+                height: 300.0,
+                fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  return Container(
+                    width: 300.0,
+                    height: 300.0,
+                    alignment: Alignment.center,
+                    child: () {
+                      if (loadingProgress != null)
+                        return CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          strokeWidth: 15.0,
+                          value: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes,
+                        );
+                      else
+                        return child;
+                    }()
+                  );
+                },
+              ),
+            );
+          else
+            return Container(
+              child: GestureDetector(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Icons.add, color: Colors.white, size: 70.0,),
+                    Text("Carregar mais...",
+                      style: TextStyle(color: Colors.white, fontSize: 22.0),)
+                  ],
+                ),
+                onTap: () {
+                  setState(() {
+                    _offset += numberOfGifs;
+                  });
+                  print("offset: $_offset");
+                },
+              ),
+            );
         }
     );
   }
