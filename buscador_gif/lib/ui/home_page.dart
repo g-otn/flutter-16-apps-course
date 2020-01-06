@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -78,13 +79,33 @@ class _HomePageState extends State<HomePage> {
                     );
                     break;
                   default:
-                    return Container();
+                    return snapshot.hasError ? Container() : _createGifTable(context, snapshot);
                 }
               },
             ),
           )
         ],
       ),
+    );
+  }
+
+  Widget _createGifTable(BuildContext context, AsyncSnapshot snapshot) {
+    return GridView.builder(
+        padding: EdgeInsets.all(10.0),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10.0,
+          mainAxisSpacing: 10.0
+        ),
+        itemCount: snapshot.data["data"].length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            child: Image.network(snapshot.data["data"][index]["images"]["fixed_height_small"]["url"],
+              height: 300.0,
+              fit: BoxFit.cover,
+            ),
+          );
+        }
     );
   }
 }
