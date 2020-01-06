@@ -103,6 +103,23 @@ class _HomePageState extends State<HomePage> {
             child: Image.network(snapshot.data["data"][index]["images"]["fixed_height_small"]["url"],
               height: 300.0,
               fit: BoxFit.cover,
+              loadingBuilder: (context, child, loadingProgress) {
+                return Container(
+                  width: 300.0,
+                  height: 300.0,
+                  alignment: Alignment.center,
+                  child: () {
+                    if (loadingProgress != null)
+                      return CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        strokeWidth: 15.0,
+                        value: loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes,
+                      );
+                    else
+                      return child;
+                  }()
+                );
+              },
             ),
           );
         }
